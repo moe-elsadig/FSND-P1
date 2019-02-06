@@ -15,7 +15,7 @@ news_c.execute("select path, count(*) as num from log where status = '200 OK' gr
 path_list = news_c.fetchall()
 
 # init an empty list to clean up the results for presenting to the user
-articles_list = []
+top_articles_list = []
 
 # iterate through the result and append to the articles_list
 print ("\nThe list of articles ordered by the number of views are:\n\n")
@@ -24,7 +24,34 @@ for i in range(1, len(path_list)):
     + "\" - " + str(path_list[i][1]) + " views\n")
 
 
+print("\n\nFrom the authors table:\n")
+news_c.execute("select id from authors")
+print("\n  > id: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select name from authors")
+print("\n  > name: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select bio from authors")
+print("\n  > bio: " + str(news_c.fetchall()[0][0][:30] + "..."))
 
+news_c.execute("select author, title, slug, lead, body, time, id from articles")
+
+print("\n\nFrom the articles table:\n")
+news_c.execute("select id from articles")
+print("\n  > id: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select author from articles")
+print("\n  > author: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select title from articles")
+print("\n  > title: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select slug from articles")
+print("\n  > slug: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select lead from articles")
+print("\n  > lead: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select body from articles")
+print("\n  > body: " + str(news_c.fetchall()[0][0]))
+news_c.execute("select time from articles")
+print("\n  > time: " + str(news_c.fetchall()[0][0]))
+
+
+news_c.close()
 
 
 

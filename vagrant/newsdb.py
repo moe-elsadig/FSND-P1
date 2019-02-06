@@ -8,9 +8,20 @@ news_db = psycopg2.connect("dbname=news")
 
 news_c = news_db.cursor()
 
-news_c.execute("select status, count(*) as num from log group by status")
+# The paths ordered by the number of visits where the status is '200 OK'
+news_c.execute("select path, count(*) as num from log where status = '200 OK' group by path order by num desc")
 
-print(news_c.fetchall()[0:100])
+# save the result in a list
+path_list = news_c.fetchall()
+
+# init an empty list to clean up the results for presenting to the user
+articles_list = []
+
+# iterate through the result and append to the articles_list
+print ("\nThe list of articles ordered by the number of views are:\n\n")
+for i in range(1, len(path_list)):
+    print("  >   \"" + str(path_list[i][0]).replace("/article/", "").replace("-"," ").title()
+    + "\" - " + str(path_list[i][1]) + " views\n")
 
 
 

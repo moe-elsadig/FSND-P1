@@ -8,48 +8,54 @@ news_db = psycopg2.connect("dbname=news")
 
 news_c = news_db.cursor()
 
-# The paths ordered by the number of visits where the status is '200 OK'
-news_c.execute("select path, count(*) as num from log where status = '200 OK' group by path order by num desc")
+# obtain the articles by the number of views
+news_c.execute("SELECT title, toparticles.num FROM articles, (SELECT path, count(*) AS num FROM log WHERE log.status = '200 OK' GROUP BY path ORDER BY num desc) as toparticles where toparticles.path LIKE CONCAT('%',articles.slug,'%')")
 
-# save the result in a list
-path_list = news_c.fetchall()
+title_list = news_c.fetchall()
+for i in range(len(title_list)):
+    print ("\"" + title_list[i][0] + "\" - " + str(title_list[i][1]) + " views\n")
 
-# init an empty list to clean up the results for presenting to the user
-top_articles_list = []
-
-# iterate through the result and append to the articles_list
-print ("\nThe list of articles ordered by the number of views are:\n\n")
-for i in range(1, len(path_list)):
-    print("  >   \"" + str(path_list[i][0]).replace("/article/", "").replace("-"," ").title()
-    + "\" - " + str(path_list[i][1]) + " views\n")
-
-
-print("\n\nFrom the authors table:\n")
-news_c.execute("select id from authors")
-print("\n  > id: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select name from authors")
-print("\n  > name: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select bio from authors")
-print("\n  > bio: " + str(news_c.fetchall()[0][0][:30] + "..."))
-
-news_c.execute("select author, title, slug, lead, body, time, id from articles")
-
-print("\n\nFrom the articles table:\n")
-news_c.execute("select id from articles")
-print("\n  > id: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select author from articles")
-print("\n  > author: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select title from articles")
-print("\n  > title: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select slug from articles")
-print("\n  > slug: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select lead from articles")
-print("\n  > lead: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select body from articles")
-print("\n  > body: " + str(news_c.fetchall()[0][0]))
-news_c.execute("select time from articles")
-print("\n  > time: " + str(news_c.fetchall()[0][0]))
-
+#
+#
+# print("\n\nFrom the authors table:\n")
+# news_c.execute("select id from authors")
+# print("\n  > id: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select name from authors")
+# print("\n  > name: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select bio from authors")
+# print("\n  > bio: " + str(news_c.fetchall()[1][0][:30] + "..."))
+#
+# news_c.execute("select author, title, slug, lead, body, time, id from articles")
+#
+# print("\n\nFrom the articles table:\n")
+# news_c.execute("select id from articles")
+# print("\n  > id: " + str(news_c.fetchall()[0][0]))
+# news_c.execute("select author from articles")
+# print("\n  > author: " + str(news_c.fetchall()[0][0]))
+# news_c.execute("select title from articles")
+# print("\n  > title: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select slug from articles")
+# print("\n  > slug: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select lead from articles")
+# print("\n  > lead: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select body from articles")
+# print("\n  > body: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select time from articles")
+# print("\n  > time: " + str(news_c.fetchall()[1][0]))
+#
+# print("\n\nFrom the log table:\n")
+# news_c.execute("select id from log")
+# print("\n  > id: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select path from log")
+# print("\n  > path: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select ip from log")
+# print("\n  > ip: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select method from log")
+# print("\n  > method: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select status from log")
+# print("\n  > status: " + str(news_c.fetchall()[1][0]))
+# news_c.execute("select time from log")
+# print("\n  > time: " + str(news_c.fetchall()[1][0]))
 
 news_c.close()
 

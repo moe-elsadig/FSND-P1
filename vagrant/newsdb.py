@@ -1,3 +1,5 @@
+#! /usr/bin/env python2.7
+
 # "Database code" for the DB Forum.
 import datetime
 import psycopg2

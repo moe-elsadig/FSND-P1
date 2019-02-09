@@ -32,12 +32,15 @@ for i in range(len(author_views_list)):
 
 
 # On which days did more than 1% of requests lead to errors?
-print ("************\n\nOn which days did more than 1% of requests lead to errors?")
+print ("************\n\nOn which days did more than 1% of requests lead to errors?\n")
 
-# Obtain the number of errors
+# Obtain the day where the percentage error is > 1%
 news_c.execute("SELECT day, perror from (SELECT DATE(time) AS day, count(*) as num, (sum(case when status='404 NOT FOUND' then 1 else 0 end)*100.00/count(status)) as perror FROM log GROUP BY day ORDER BY perror DESC) as query1 WHERE perror > 1.00")
 
-print(news_c.fetchall())
+high_error_list = news_c.fetchall()
+for i in range(len(high_error_list)):
+    print ((high_error_list[i][0]).strftime('%B %d, %Y') + "  " +  str(round(high_error_list[i][1], 2)) + " %")
+
 
 # Exploring the tables!**********
 #

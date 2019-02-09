@@ -8,14 +8,24 @@ news_db = psycopg2.connect("dbname=news")
 
 news_c = news_db.cursor()
 
+# What are the most popular three articles?
+
 # obtain the articles by the number of views
-news_c.execute("SELECT title, toparticles.num FROM articles, (SELECT path, count(*) AS num FROM log WHERE log.status = '200 OK' GROUP BY path ORDER BY num desc) as toparticles where toparticles.path LIKE CONCAT('%',articles.slug,'%')")
+news_c.execute("SELECT title, top_path.num FROM articles, (SELECT path, count(*) AS num FROM log WHERE log.status = '200 OK' GROUP BY path ORDER BY num desc) as top_path where top_path.path LIKE CONCAT('%',articles.slug,'%')")
 
 title_list = news_c.fetchall()
 for i in range(len(title_list)):
     print ("\"" + title_list[i][0] + "\" - " + str(title_list[i][1]) + " views\n")
 
-#
+
+# Who are the most popular article authors?
+
+
+news_c.execute("SELECT authors.name, top_auth_id.path_sum FROM authors,(SELECT articles.author, sum(top_path.num) as path_sum FROM articles, (SELECT path, count(*) AS num FROM log WHERE log.status = '200 OK' GROUP BY path ORDER BY num desc) as top_path where top_path.path LIKE CONCAT('%',articles.slug,'%') GROUP BY articles.author ORDER BY path_sum desc) as top_auth_id WHERE authors.id = top_auth_id.author")
+
+print(news_c.fetchall())
+
+# Exploring the tables!**********
 #
 # print("\n\nFrom the authors table:\n")
 # news_c.execute("select id from authors")
@@ -58,25 +68,3 @@ for i in range(len(title_list)):
 # print("\n  > time: " + str(news_c.fetchall()[1][0]))
 
 news_c.close()
-
-
-
-
-# def get_posts():
-#     db = psycopg2.connect("dbname=forum")
-#     c = db.cursor()
-#     """Return all posts from the 'database', most recent first."""
-#     c.execute("""select content, time from posts order by time desc""")
-#     return c.fetchall()
-#     # return reversed(POSTS)
-#
-# def add_post(content):
-#     db = psycopg2.connect("dbname=forum")
-#     c = db.cursor()
-#     content = bleach.clean(content)
-#     """Add a post to the 'database' with the current timestamp."""
-#     c.execute("insert into posts values (%s)", (content,))
-#     c.execute("update posts set content = '' where content like '%spam%'")
-#     c.execute("delete from posts where content like ''")
-#     db.commit()
-#     db.close()

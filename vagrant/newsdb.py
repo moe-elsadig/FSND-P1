@@ -6,6 +6,7 @@ import psycopg2
 
 DBNAME = "news"
 
+
 def connect(database_name):
     """
        Connect to the PostgreSQL database.  Returns a database connection.
@@ -21,15 +22,16 @@ def connect(database_name):
                 The first element (db) is a connection to the database.
                 The second element (cursor) is a cursor for the database.
         """
-    # And, do not use bare 'except' - PEP8/pycodestyle will flag this as warnings.
     except psycopg2.Error as err:
         print "Unable to connect to database"
         print err
         sys.exit(1)      # The easier method - exit the program
 
+
 def answer1():
     """Answer the first question ..."""
-    print("Question 1: What are the most popular three articles of all time?\n")
+    print("Question 1: "
+          + "What are the most popular three articles of all time?\n")
 
     db, news_c = connect(DBNAME)
 
@@ -47,11 +49,16 @@ def answer1():
     # Fetch the results of the query and print the top 3 items
     title_list = news_c.fetchall()
     for i in range(0, len(title_list[:3])):
-        print("\"" + title_list[i][0] + "\" - " + str(title_list[i][1]) + " views\n")
+        print("\"" + title_list[i][0]
+              + "\" - "
+              + str(title_list[i][1])
+              + " views\n")
+
 
 def answer2():
     """Answer second question ..."""
-    print("Question 2: Who are the most popular article authors of all time?\n")
+    print("Question 2: "
+          + "Who are the most popular article authors of all time?\n")
 
     db, news_c = connect(DBNAME)
 
@@ -83,9 +90,11 @@ def answer2():
               + str(author_views_list[i][1])
               + " views\n")
 
+
 def answer3():
     """Answer the third first question ..."""
-    print("Question 3: What are the most popular three articles of all time?\n")
+    print("Question 3: "
+          + "What are the most popular three articles of all time?\n")
 
     db, news_c = connect(DBNAME)
 
@@ -109,6 +118,7 @@ def answer3():
               + "  "
               + str(high_error_list[i][1])
               + "%")
+
 
 def run():
     """Running report ..."""

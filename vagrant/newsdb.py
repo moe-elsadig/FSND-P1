@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python
 
 # "Database code" for the DB Forum.
 import datetime
@@ -9,7 +9,7 @@ news_db = psycopg2.connect("dbname=news")
 news_c = news_db.cursor()
 
 # What are the most popular three articles?
-print("************\n\nWhat are the most popular three articles?\n")
+print("\n\nWhat are the most popular three articles?\n")
 # obtain the articles by the number of views
 news_c.execute("""
     SELECT title, top_path.num
@@ -18,7 +18,7 @@ news_c.execute("""
             FROM log
             WHERE log.status = '200 OK'
             GROUP BY path
-            ORDER BY num desc) as top_path
+            ORDER BY num DESC) AS top_path
     WHERE top_path.path LIKE CONCAT('%', articles.slug, '%')""")
 
 # Fetch the results of the query and print the top 3 items
@@ -30,7 +30,7 @@ for i in range(0, len(title_list[:3])):
           + " views\n")
 
 # Who are the most popular article authors?
-print("""************\n\nWho are the most popular article authors?\n""")
+print("\n\nWho are the most popular article authors?\n")
 
 # obtain the authors ordered by the sum of their article's views
 news_c.execute("""
@@ -42,11 +42,13 @@ news_c.execute("""
             FROM log
             WHERE log.status = '200 OK'
             GROUP BY path
-            ORDER BY num desc) as top_path
-        WHERE top_path.path LIKE CONCAT('%',articles.slug,'%')
+            ORDER BY num DESC) AS top_path
+        WHERE top_path.path = concat('/article/',articles.slug)
         GROUP BY articles.author
-        ORDER BY path_sum desc) as top_auth_id
-    WHERE authors.id = top_auth_id.author""")
+        ORDER BY path_sum DESC
+        LIMIT 3) AS top_auth_id
+    WHERE authors.id = top_auth_id.author
+    LIMIT 4""")
 
 #  Fetch the results of the query and print in descending order
 # (already sorted from the query)
@@ -63,11 +65,11 @@ print("\n\nOn which days did more than 1% of requests lead to errors?\n")
 
 # Obtain the day where the percentage error is > 1%
 news_c.execute("""
-    SELECT day, perror
+    SELECT TO_CHAR(day,'Month DD, YYYY') dayformat, perror
     FROM (SELECT DATE(time) AS day,
             count(*) as num,
-            (sum(CASE WHEN status='404 NOT FOUND'
-                THEN 1 ELSE 0 END)*100.00/count(status)) AS perror
+            ROUND (sum(CASE WHEN status='404 NOT FOUND'
+                THEN 1 ELSE 0 END)*100.00/count(status), 2) AS perror
           FROM log
           GROUP BY day
           ORDER BY perror DESC) AS query1
@@ -75,10 +77,11 @@ news_c.execute("""
 
 # print all the days where the error rate was more than 1%
 high_error_list = news_c.fetchall()
+
 for i in range(len(high_error_list)):
-    print((high_error_list[i][0]).strftime('%B %d, %Y')
+    print((high_error_list[i][0])
           + "  "
-          + str(round(high_error_list[i][1], 2))
+          + str(high_error_list[i][1])
           + "%")
 
 news_c.close()

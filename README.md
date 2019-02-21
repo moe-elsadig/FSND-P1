@@ -1,15 +1,35 @@
-# FSND-P1
+# Project Name: News Website Statistics
 
-Udacity's Full-Stack Nanodegree
-Log Analysis Project
+The following tool is an internal reporting tool for a newspaper site. A database is setup using **PostgreSQL** to record the site's data on it's articles as well as the web server log for the site. Using that information the Python script **newsdb.py** takes advantage of the **psycopg2** library to query the data and extract some useful information to answer some key questions:
+The output will be an answer to the following questions
 
-The following tool is an internal reporting tool, for newspaper site. The site's database contains articles, as well as the web server log for the site. The log has a database row for each time a reader loaded a web page. Using that information the following code will be used to answer some key questions.
+* Question 1: **What are the most popular three articles?**
+
+
+* Question 2: **Who are the most popular article authors?**
+
+
+* Question 3: **On which days did more than 1% of requests lead to errors?**
+
+
+## Requirements
+
+* Terminal Application
+* vagrant
+* VirtualBox
+* [Vagrant file as provided by Udacity](Vagrant file as provided by Udacity)
+* Python
+* PostgreSQL
+* pyscopg2 library
+
 
 For this project a Virtual Machime (VM) is provided setup with Vagrant which contains the PostgreSQL database and support software required for the project.
 
+## How to use
+
 To bring up the virtual machine online use `vagrant up` and then log into it with `vagrant ssh`
 
-You can download the (database data)[https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip]. Place this into the Vagrant shared directory, and to load the data `cd` into the `vagrant` directory and use the command `psql -d news -f newsdata.sql`
+You can download the [database data](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip). Place this into the Vagrant shared directory, and to load the data `cd` into the `vagrant` directory and use the command `psql -d news -f newsdata.sql`
 
 - `psql` - the PostgreSQL command line program.
 - `-d news` - connect to the database named news which has been set up for you.
@@ -56,12 +76,4 @@ To run the project navigate to the vagrant directory in a terminal window and ru
         python newsdb.py
 
 
-The output will be an answer to the following questions
-
-Question 1: `What are the most popular three articles?`
-
-
-Question 2: `Who are the most popular article authors?`
-
-
-Question 3: `On which days did more than 1% of requests lead to errors?`
+`

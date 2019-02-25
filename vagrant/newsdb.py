@@ -30,7 +30,7 @@ def connect(database_name):
 
 def answer1():
     """Answer the first question ..."""
-    print("Question 1: "
+    print("\033[0;31;47m Question 1: \033[0m"
           + "What are the most popular three articles of all time?\n")
 
     db, news_c = connect(DBNAME)
@@ -57,7 +57,7 @@ def answer1():
 
 def answer2():
     """Answer second question ..."""
-    print("Question 2: "
+    print("\033[0;31;47m Question 2: \033[0m"
           + "Who are the most popular article authors of all time?\n")
 
     db, news_c = connect(DBNAME)
@@ -93,7 +93,7 @@ def answer2():
 
 def answer3():
     """Answer the third first question ..."""
-    print("Question 3: "
+    print("\033[0;31;47m Question 3: \033[0m"
           + "What are the most popular three articles of all time?\n")
 
     db, news_c = connect(DBNAME)

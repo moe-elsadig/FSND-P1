@@ -102,7 +102,8 @@ Running the command will connect to your installed database server and execute t
 
 With the terminal of your VM in focus run the following command:
 
-```python newsdb.py
+```
+python newsdb.py
 ```
 ![running python newsdb.py screenshot](/sc_newsdbpy.png)
 
